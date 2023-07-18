@@ -1,0 +1,19 @@
+---
+- name:  Deploy Helm Chart
+  hosts: Master
+  tasks:
+    - name: Copy Helm chart
+      copy:
+        src: /home/azureuser/backend-helm
+        dest: /home/ubuntu/
+
+  
+    - name: Install Helm chart
+      command: helm upgrade --install backend /home/ubuntu/backend-helm --kubeconfig ~/.kube/config
+      register: helm_output
+      ignore_errors: true
+    
+    - name: Debug Helm output
+      debug:
+       var: helm_output
+

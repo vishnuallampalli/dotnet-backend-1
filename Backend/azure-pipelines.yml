@@ -1,0 +1,25 @@
+trigger:
+- main
+variables:
+   - group: Docker credentials
+   - group: DockerImages
+   
+pool:
+  name: pocagent
+
+steps:
+- task: dependency-check-build-task@6
+  inputs:
+    projectName: 'backend'
+    scanPath: '.'
+    format: 'HTML'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+        cd Backend
+        sudo docker build -t $(backend) .
+        sudo docker login -u $(DockerUsername) -p $(DockerPassword)
+        sudo docker push pratyusha2001/backend
+
+
